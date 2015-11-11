@@ -1,2 +1,2 @@
 # HandheldSDU
-The Project Of SDU Library
+The Project Of Seat Management Of Library System For SDU(WH)
