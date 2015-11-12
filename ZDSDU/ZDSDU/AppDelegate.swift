@@ -40,15 +40,97 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent;
         
         
+        
+        
+        //----获取用户信息
+        
+        
+        userinfo = UserInfo()
+        userinfo.userName=""
+        userinfo.userNumber=""
+        userinfo.userPassword=""
+        userinfo.islogin = false
+        ReadMyUserData()
+        
+        
         self.window!.rootViewController = naviCtrl
         
 
         
         
         
-        
         return true
     }
+    
+    
+    func ReadMyUserData()
+    {
+        let filePath=NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentationDirectory, NSSearchPathDomainMask.AllDomainsMask, true)[0]+"/Userinfo.dat"//得到路径
+        var fileGetArr:UserInfo?
+        
+        fileGetArr=(NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? UserInfo)
+        
+        if fileGetArr != nil
+        {
+            userinfo=fileGetArr!
+            
+            print(userinfo)
+        }
+        else{
+            userinfo = UserInfo()
+            userinfo.userName=""
+            userinfo.userNumber=""
+            userinfo.userPassword=""
+            userinfo.islogin = false
+        }
+        
+        NSLog(filePath as String)//打印提示
+
+        
+        
+        
+    }
+    func WriteMyUserData()
+    {
+        //创建路径
+        let fileManager=NSFileManager.defaultManager()
+        var sp=NSSearchPathForDirectoriesInDomains(.DocumentationDirectory, NSSearchPathDomainMask.UserDomainMask, true)//得到路径
+        do{
+            try fileManager.createDirectoryAtPath(sp[0], withIntermediateDirectories: true, attributes: nil)
+        }catch
+        {
+            print(error)
+        }
+        
+        //保存数据
+        let filePath=sp[0]+"/Userinfo.dat"//得到路径
+        NSKeyedArchiver.archiveRootObject(userinfo,toFile: filePath)
+        
+        NSLog(filePath as String)//打印提示
+        
+        //
+        //        if sp.count>0
+        //        {
+        //            print(sp[0])
+        //            let url=NSURL(fileURLWithPath: "\(sp[0])/UserData.txt")
+        //            let data=NSMutableData()
+        //            let tempStr=NSString(format:"%.2f",allMeter/1000)
+        //            data.appendData(tempStr.dataUsingEncoding(NSUTF8StringEncoding,allowLossyConversion: true)!)
+        //            data.writeToFile(url.path!, atomically: true)
+        //            NSLog("保存成功:"+(tempStr as String))
+        //        }
+        
+    }
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
 
     func applicationWillResignActive(application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
